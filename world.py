@@ -61,7 +61,6 @@ class World:
 				self.events[newEvent.id()] = newEvent # getting id possibly costly + persistence issues
 				if self.printLog:
 					event.addDownstream(newEvent)
-				newEvent.impactFactor += 0.5
 				event.impactFactor += 0.5
 			except Exception:
 				# do nothing
@@ -87,4 +86,4 @@ class World:
 		if self.printLog:
 			self.doPrintLog()
 
-		print("World ran!")
+		# print("World ran!")

@@ -67,6 +67,7 @@ class Event:
 
 	def derivedMain(self, upstream):
 		self.main = copy.deepcopy(upstream.main)
+		self.impactFactor = upstream.impactFactor
 
 		# the event might be attributed to the town in the story, 
 		# the town the story is heard from, or local town

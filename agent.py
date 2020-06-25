@@ -1,4 +1,7 @@
 import random
+#import timestamp module for timestamp in tryPUtInBuffer
+#gives epoch time
+import time
 
 class Agent:
 
@@ -6,6 +9,7 @@ class Agent:
 		self.id = nodeid
 		# the agent should have a buffer of recently-read stories
 		# see tryPutInBuffer()
+		self.buffer = {}
 		# the agent should have a two small neural networks: 
 		#  story-to-text and vice versa
 
@@ -34,10 +38,20 @@ class Agent:
 		## as a buffer, it has a limit to the number of instances that can be stored
 		## when it is "full", it will not accept new stories. Should return gracefully
 		## with a message, without causing exceptions/errors
+		limit = 6 #subject to change
+		if (len(buffer) < limit):
+			buffer[time.time()] = message
+		else:
+			return "Sorry, buffer is full"
 
 	def pruneBuffer(self):
 		# remove stories in the buffer that are too old
 		# make the threshold for "too old" a variable so it's easy to tweak
+		#86400 epoch seconds is one day
+		old_threshold = time.time() - 86400 #subject to change
+		for key in buffer:
+			if (key > old_threshold):
+				buffer.pop(key)
 
 	def step(self):
 		# Decide the neighbor to spread a message to

@@ -8,6 +8,9 @@ from names import layseggsnames, animalnames, vegetablenames, thingnames, neighb
 infEngine = inflect.engine()
 
 class TextMain:
+	"""
+	This class should draw from a database instead of doing rigid selection of frames/variables
+	"""
 
 	def __init__(self):
 		self.randomFrame()

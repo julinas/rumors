@@ -2,6 +2,8 @@ import random
 #import timestamp module for timestamp in tryPUtInBuffer
 #gives epoch time
 import time
+#imports sys to access max number used in  tryPopBuffer
+import sys
 
 class Agent:
 
@@ -42,7 +44,8 @@ class Agent:
 		if (len(buffer) < limit):
 			buffer[time.time()] = message
 		else:
-			return "Sorry, buffer is full"
+			print("Buffer is full")
+			return None
 
 	def pruneBuffer(self):
 		# remove stories in the buffer that are too old
@@ -52,6 +55,28 @@ class Agent:
 		for key in buffer:
 			if (key > old_threshold):
 				buffer.pop(key)
+	
+	def tryPopBuffer(self):
+		#pops buffer and returns the story that is popped
+		#else, returns gracefully
+
+		if (len(buffer) > 0):
+			firstKey = sys.float_info.max
+			for key in buffer:
+				if key < firstKey:
+					firstKey = key
+			buffer.pop(firstKey)
+			return buffer[firstKey]
+		else:
+			print("Buffer is empty")
+			return None
+
+	def tryPopRandomFromBuffer(self):
+		#pops a random element from the buffer
+		#returns the random element / story
+		randomKey = random.choice(list(buffer))
+		buffer.pop(randomKey)
+		return buffer[randomKey]
 
 	def step(self):
 		# Decide the neighbor to spread a message to

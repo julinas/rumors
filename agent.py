@@ -2,8 +2,6 @@ import random
 #import timestamp module for timestamp in tryPUtInBuffer
 #gives epoch time
 import time
-#imports sys to access max number used in  tryPopBuffer
-import sys
 
 class Agent:
 
@@ -11,7 +9,7 @@ class Agent:
 		self.id = nodeid
 		# the agent should have a buffer of recently-read stories
 		# see tryPutInBuffer()
-		self.buffer = {}
+		self.buffers = []
 		# the agent should have a two small neural networks: 
 		#  story-to-text and vice versa
 
@@ -42,7 +40,7 @@ class Agent:
 		## with a message, without causing exceptions/errors
 		limit = 6 #subject to change
 		if (len(buffer) < limit):
-			buffer[time.time()] = message
+			buffer.append((time.time(), message))
 		else:
 			print("Buffer is full")
 			return None
@@ -50,33 +48,31 @@ class Agent:
 	def pruneBuffer(self):
 		# remove stories in the buffer that are too old
 		# make the threshold for "too old" a variable so it's easy to tweak
-		#86400 epoch seconds is one day
-		old_threshold = time.time() - 86400 #subject to change
-		for key in buffer:
-			if (key > old_threshold):
-				buffer.pop(key)
+		# any value BEFORE threshold will be deleted
+		index_threshold = 4 #subject to change
+		if (len(buffer) > index_threshold):
+			buffer = buffer[index_threshold:]
+		else:
+			buffer.clear()
 	
 	def tryPopBuffer(self):
-		#pops buffer and returns the story that is popped
+		#pops first element in buffer and returns the story that is popped
 		#else, returns gracefully
 
 		if (len(buffer) > 0):
-			firstKey = sys.float_info.max
-			for key in buffer:
-				if key < firstKey:
-					firstKey = key
-			buffer.pop(firstKey)
-			return buffer[firstKey]
+			return buffer.pop(0)
 		else:
 			print("Buffer is empty")
 			return None
 
 	def tryPopRandomFromBuffer(self):
 		#pops a random element from the buffer
-		#returns the random element / story
-		randomKey = random.choice(list(buffer))
-		buffer.pop(randomKey)
-		return buffer[randomKey]
+		if (len(buffer) > 0):
+			randomIndex = int(random.random()*len(buffer))
+			return buffer.pop(randomIndex)
+		else:
+			print("Buffer is empty")
+			return None
 
 	def step(self):
 		# Decide the neighbor to spread a message to

@@ -1,9 +1,6 @@
 import random
 class Agent:
 
-	_buffer = [] #list of stories?
-	Agent neighbor #general neighbor
-
 	def __init__(self, nodeid):
 		self.id = nodeid
 		# self == this?
@@ -18,7 +15,7 @@ class Agent:
 		# Asynchronously receive a story that spawns in the environment
 		pass
 
-	def sendMessage(self, message): #what is self?? Neighbor? the current agent?
+	def sendMessage(self, neighbor, message):
 		pass
 
 	def receiveMessage(self, message):
@@ -42,15 +39,13 @@ class Agent:
 		# make the threshold for "too old" a variable so it's easy to tweak
 
 	def step(self):
-		neighbors = names.neighbornames
-		neighbor = new Agent(self, "");
-		for key, value in neighbors.items():
-			if id(self) == key:
-				neighbor = new Agent(neighbor, value[random.randint(0, value.len() - 1)])# select random name from latter half of namelist
-				#should I match the Agent with the neighbor?  Is there already a neighbor Agent instantiated?
-		if (self._buffer().len() != 0):
-			story = _buffer[random.randint(0, _buffer.len() - 1)];
-			sendMessage(neighbor, storyToText(story)) #assuming self is story type for storyToText and self is neighbor for sendMessage
+		key = id(self)
+		list = World.G.neighbors(key)
+		neighbor = random.choice(list)
+		story = self.tryPopRandomBuffer()
+		if (story != None):
+			text = self.storyToText(story)
+			self.sendMessage(neighnor, text)
 		else:
 			return;
 		# Decide the neighbor to spread a message to

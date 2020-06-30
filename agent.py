@@ -9,7 +9,7 @@ class Agent:
 		self.id = nodeid
 		# the agent should have a buffer of recently-read stories
 		# see tryPutInBuffer()
-		self.buffers = []
+		self.buffer = []
 		# the agent should have a two small neural networks: 
 		#  story-to-text and vice versa
 

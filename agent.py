@@ -58,9 +58,7 @@ class Agent:
 		story = self.tryPopRandomBuffer()
 		if (story != None):
 			text = self.storyToText(story)
-			self.sendMessage(neighnor, text)
-		else:
-			return;
+			self.sendMessage(neighbor, text)
 		# Decide the neighbor to spread a message to
 		# Choose a story in the buffer to spread
 		# return early if there is no story in the buffer

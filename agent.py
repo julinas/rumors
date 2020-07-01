@@ -66,7 +66,7 @@ class Agent:
 		# Send story-text to chosen neighbor (call sendMessage)
 		pass
 
-	def storyToText(self):
+	def storyToText(self, story):
 		# can use dummy values before a neural network module is set up
 		pass
 

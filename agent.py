@@ -2,25 +2,23 @@ import random
 #import timestamp module for timestamp in tryPUtInBuffer
 #gives epoch time
 import time
-
 class Agent:
 
 	def __init__(self, nodeid):
 		self.id = nodeid
 		# the agent should have a buffer of recently-read stories
 		# see tryPutInBuffer()
-		self.buffer = []
-		# the agent should have a two small neural networks: 
+		# the agent should have a two small neural networks:
+    	# the agent should have a two small neural networks:
 		#  story-to-text and vice versa
 
 	def id(self):
 		return self.id
-
 	def perceiveStory(self):
 		# Asynchronously receive a story that spawns in the environment
 		pass
 
-	def sendMessage(self, message):
+	def sendMessage(self, neighbor, message):
 		pass
 
 	def receiveMessage(self, message):
@@ -33,7 +31,7 @@ class Agent:
 
 	def tryPutInBuffer(self, message):
 		## the buffer should NOT be a "buffer" type (which stores bytes)
-		## for this buffer, use a dictionary where the key is timestamp of 
+		## for this buffer, use a dictionary where the key is timestamp of
 		## when the story is processed, and value is the story itself
 		## as a buffer, it has a limit to the number of instances that can be stored
 		## when it is "full", it will not accept new stories. Should return gracefully
@@ -54,7 +52,7 @@ class Agent:
 			buffer = buffer[index_threshold:]
 		else:
 			buffer.clear()
-	
+
 	def tryPopBuffer(self):
 		#pops first element in buffer and returns the story that is popped
 		#else, returns gracefully
@@ -75,6 +73,13 @@ class Agent:
 			return None
 
 	def step(self):
+		key = id(self)
+		list = World.G.neighbors(key)
+		neighbor = random.choice(list)
+		story = self.tryPopRandomBuffer()
+		if (story != None):
+			text = self.storyToText(story)
+			self.sendMessage(neighbor, text)
 		# Decide the neighbor to spread a message to
 		# Choose a story in the buffer to spread
 		# return early if there is no story in the buffer
@@ -82,7 +87,7 @@ class Agent:
 		# Send story-text to chosen neighbor (call sendMessage)
 		pass
 
-	def storyToText(self):
+	def storyToText(self, story):
 		# can use dummy values before a neural network module is set up
 		pass
 

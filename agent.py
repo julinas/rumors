@@ -2,6 +2,9 @@ import random
 #import timestamp module for timestamp in tryPUtInBuffer
 #gives epoch time
 import time
+import numpy as np
+from tensorflow import keras
+from tensorflow.keras import layers
 class Agent:
 
 	def __init__(self, nodeid):
@@ -9,6 +12,7 @@ class Agent:
 		# the agent should have a buffer of recently-read stories
 		# see tryPutInBuffer()
 		self.buffer = []
+		self.layers = keras.layers
     	# the agent should have a two small neural networks:
 		#  story-to-text and vice versa
 
@@ -91,6 +95,15 @@ class Agent:
 		# can use dummy values before a neural network module is set up
 		pass
 
-	def textToStory(self):
+	def textToStory(self, text):
+		# sequential model
+		url = "URL FOR DATABASE"
+		path = tf.keras.utils.get_file(url.split('/')[-1], url)
+		model = keras.Sequential()
+		model.add(layers.Dense(20, activation = 'relu', input_shape = 10,))
+		model.add(layers.Dense(20, activation = 'relu'))
+		model.add(layers.Dense(20, activation = 'softmax'))
+
+		model.fit(x, y, epochs = 10, batch_size = 32)
 		# can use dummy values before a neural network module is set up
 		pass

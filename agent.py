@@ -9,7 +9,7 @@ class Agent:
 		self.id = nodeid
 		# the agent should have a buffer of recently-read stories
 		# see tryPutInBuffer()
-		self.buffer = {}
+		self.buffer = []
 		# the agent should have a two small neural networks: 
 		#  story-to-text and vice versa
 
@@ -40,18 +40,39 @@ class Agent:
 		## with a message, without causing exceptions/errors
 		limit = 6 #subject to change
 		if (len(buffer) < limit):
-			buffer[time.time()] = message
+			buffer.append((time.time(), message))
 		else:
-			return "Sorry, buffer is full"
+			print("Buffer is full")
+			return None
 
 	def pruneBuffer(self):
 		# remove stories in the buffer that are too old
 		# make the threshold for "too old" a variable so it's easy to tweak
-		#86400 epoch seconds is one day
-		old_threshold = time.time() - 86400 #subject to change
-		for key in buffer:
-			if (key > old_threshold):
-				buffer.pop(key)
+		# any value BEFORE threshold will be deleted
+		index_threshold = 4 #subject to change
+		if (len(buffer) > index_threshold):
+			buffer = buffer[index_threshold:]
+		else:
+			buffer.clear()
+	
+	def tryPopBuffer(self):
+		#pops first element in buffer and returns the story that is popped
+		#else, returns gracefully
+
+		if (len(buffer) > 0):
+			return buffer.pop(0)
+		else:
+			print("Buffer is empty")
+			return None
+
+	def tryPopRandomFromBuffer(self):
+		#pops a random element from the buffer
+		if (len(buffer) > 0):
+			randomIndex = int(random.random()*len(buffer))
+			return buffer.pop(randomIndex)
+		else:
+			print("Buffer is empty")
+			return None
 
 	def step(self):
 		# Decide the neighbor to spread a message to

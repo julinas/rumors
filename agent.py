@@ -9,7 +9,7 @@ class Agent:
 		# the agent should have a buffer of recently-read stories
 		# see tryPutInBuffer()
 		# the agent should have a two small neural networks:
-    # the agent should have a two small neural networks: 
+    # the agent should have a two small neural networks:
 		#  story-to-text and vice versa
 
 	def id(self):
@@ -59,8 +59,6 @@ class Agent:
 		if (story != None):
 			text = self.storyToText(story)
 			self.sendMessage(neighbor, text)
-		else:
-			return
 		# Decide the neighbor to spread a message to
 		# Choose a story in the buffer to spread
 		# return early if there is no story in the buffer

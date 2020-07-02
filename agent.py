@@ -3,7 +3,6 @@ import random
 #gives epoch time
 import time
 import numpy as np
-import pandas
 from tensorflow import keras
 from tensorflow.keras import layers
 from keras.preprocessing.text import text_to_word_sequence
@@ -20,6 +19,17 @@ class Agent:
     	# the agent should have a two small neural networks:
 		#  story-to-text and vice versa
 
+	def initializeTextToStoryNeuralNetwork(self):
+		model = keras.Sequential(
+    		[
+				keras.Input(shape = len(tokens)),
+		        layers.Conv2D(32, 5, strides=2, activation="relu"),
+				layers.Conv2D(32, 3, activation="relu")
+				layers.Dense(32, activation='relu')
+				layers.Dense(32, activation="softmax", name="predictions")
+    		]
+		)
+		return model
 	def id(self):
 		return self.id
 	def perceiveStory(self):
@@ -103,79 +113,35 @@ class Agent:
 		# sequential model
 		#TODO: Ask if method will take from database, if does, delete 104-6
 
-		### if text not provided
-		url = "URL FOR DATABASE"
-		path = tf.keras.utils.get_file(url.split('/')[-1], url)
-		data = pandas.read_csv(path)
-		data = data[pandas.notnull(data['subject'])]
-		data = data[pandas.notnull(data['action'])]
-		# TODO: add as necessary
-		train_size = int(len(data) * .8)
-		train_subjects = data['subject'][:train_size]
-		train_verbs = data['verb'][:train_size]
+	def textToStory(self, text):
 
-		test_subjects = data['subject'][:train_size]
-		test_verbs = data['verb'][:train_size]
-
-		tokenize = keras.preprocessing.text.Tokenizer(num_words = 10000, char_level = False)
-
-		###
-
-		### if text is a sentence
-		url = "URL FOR DATABASE"
-		path = tf.keras.utils.get_file(url.split('/')[-1], url)
-		data = pandas.read_csv(path)
-		data = data[pandas.notnull(data['Text'])]
-
-		train_size = int(len(data) * .8)
-
-		train_text = data['Text'][:train_size]
-		test_text = data['Text'][:train_size]
-
-		tokenize = keras.preprocessing.text.Tokenizer(num_words = 10000, char_level = False)
-		tokenize.fit_on_texts()
-
-		text_bow_train = tokenize.texts_to_matrix(train_text)
-		text_bow_train = tokenize.texts_to_matrix(test_text)
-
-		encoder = LabelEncoder()
-		encoder.fit(train_text)
-		train_text = encoder.transform(train_text)
-		test_text = encoder.transform(test_text)
-
-		num = np.max(train_text) + 1
-
-		train_text = keras.utils.to_categorical(train_text, num)
-		test_text = keras.utils.to_categorical(test_text, num)
-		###
-
-		### If text provided
 		tokens = text_to_word_sequence(text)
 		words = set(text_to_word_sequence(text))
 		vocab_size = len(words)
-		result = one_hot(text, round(vocab_size * 1.3))
+		originalResult = one_hot(text, round(vocab_size * 1.3))
+		copyResult = originalResult.deepcopy()
 
-		train_size = int(len(tokens) * .8)
-		train_subjects = tokens['subject'][:train_size]
-		train_verbs = tokens['verb'][:train_size]
-
-		test_subjects = tokens['subject'][:train_size]
-		test_verbs = tokens['verb'][:train_size]
-		###
-
-
-		model = keras.Sequential(
-    		[
-				keras.Input(shape = len(tokens)),
-		        layers.Conv2D(32, 5, strides=2, activation="relu"),
-				layers.Conv2D(32, 3, activation="relu")
-				layers.Dense(32, activation='relu')
-    		]
-		)
+		model = initializeTextToStoryNeuralNetwork()
 		model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
-		model.fit(tokens, y, epochs = 10, batch_size = 32)
-		model = model.evaluate(x_test, y_test, verbose=0)
+
+		variable = {
+						'subject', 'action', 'duration'
+					}
+
+
+		randomVariable = random.choice(variable)
+		# key is name of subject/action/duration/etc. in word labels
+		while !(key in randomVariable):
+			randomVariable = random.choice(variable)
+
+		loc = tokens.index(randomVariable)
+		text_with_blank = copyResult.pop(randomVariable)
+		text_with_blank = copyResult.insert(loc, -1)
+
+		model.evaluate(originalResult, text_with_blank, epochs = 10, batch_size = 32)
+
+		# FOR KELLY: ignore textToStory purpose for now
+		story = Story(World, node, text)
 		node = World.getRandomNode()
-		story = Story(World, node, upstream) # What is upstream?
 		# can use dummy values before a neural network module is set up
 		pass

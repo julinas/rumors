@@ -122,7 +122,6 @@ class Agent:
 		copyResult = originalResult.deepcopy()
 
 		model = initializeTextToStoryNeuralNetwork()
-		model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
 
 		variable = {
 						'subject', 'action', 'duration'
@@ -136,8 +135,9 @@ class Agent:
 
 		loc = tokens.index(randomVariable)
 		text_with_blank = copyResult.pop(randomVariable)
-		text_with_blank = copyResult.insert(loc, -1)
+		text_with_blank = copyResult.insert(loc, -1) #-1 = blank
 
+		model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
 		model.evaluate(originalResult, text_with_blank, epochs = 10, batch_size = 32)
 
 		# FOR KELLY: ignore textToStory purpose for now

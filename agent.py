@@ -119,7 +119,13 @@ class Agent:
 		text = np.array2string(arr)
 
 		return str(text + frame)
-
+	
+	def turnStoryToInput(self, story, frame, variable):
+		pass
+	
+	def trainStoryToText(model, tensor, output)
+		pass
+	
 	def textToStory(self):
 		# can use dummy values before a neural network module is set up
 		pass

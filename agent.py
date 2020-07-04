@@ -3,6 +3,13 @@ import random
 #gives epoch time
 import time
 
+#for the Sequential model
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers
+import pandas as pd
+import numpy as np
+
 class Agent:
 
 	def __init__(self, nodeid):
@@ -11,6 +18,7 @@ class Agent:
 		# see tryPutInBuffer()
 		self.buffer = []
 		# the agent should have a two small neural networks: 
+		self.model = keras.Sequential()
 		#  story-to-text and vice versa
 
 	def id(self):
@@ -82,9 +90,35 @@ class Agent:
 		# Send story-text to chosen neighbor (call sendMessage)
 		pass
 
-	def storyToText(self):
+	def storyToText(self, story, frame, variable):
 		# can use dummy values before a neural network module is set up
-		pass
+
+		#data preparation - needs FrameNet
+		# the data, split between train and test sets
+		data = # the dataset: currently unavailable
+		output = # expected output of model 
+
+		#NEW METHOD: assume there's already a trained model that does the conversion
+		tensor = turnStoryToInput(story, frame, variable)
+
+		#build neural network
+		model.add(tf.keras.Input(shape=(16,)))
+		model.add(layers.Dense(10, activation = 'relu'))
+		model.add(layers.Dense(10, activation = 'relu'))
+		model.add(layers.Dense(3, activation = 'relu'))
+
+		model.compile(optimizer='adam', loss='categorical_crossentropy')
+
+		#NEW METHOD: pre-written train method, includes model.fit() and model.compile()
+		trainStoryToText(model, tensor, output)
+		
+		#returns a numpy array of predictions
+		arr = model.predict(tensor)
+
+		#convert numpy array to string
+		text = np.array2string(arr)
+
+		return str(text + frame)
 
 	def textToStory(self):
 		# can use dummy values before a neural network module is set up

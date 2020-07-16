@@ -16,7 +16,7 @@ class Agent:
 		# see tryPutInBuffer()
 		self.buffer = []
 		self.layers = keras.layers
-    	# the agent should have a two small neural networks:
+    # the agent should have a two small neural networks:
 		#  story-to-text and vice versa
 
 	def initializeTextToStoryNeuralNetwork(self):

@@ -1,34 +1,56 @@
 import pymongo
-import os.path
+from pymongo import MongoClient
 from nltk import framenet as fn
 
 
-def getText:
-    if (mongoClient != None)
-        MongoClient mongoClient = new MongoClient()
+class Helper:
+    __db = None
+    def __init__(self):
+        #Initialize your database connection here.
+        if Helper.__db == None:
+            Helper.__db = connect('localhost:27017/framenet')
 
-    dbList = mongoClient.list_database_names()
-    if processed_data not in dbList):
-        exists = os.path.isfile('\downloads\data_filter.json')
-        if not exists:
-            print("json file doesn't exist")
-            dbList = mongoClient.list_database_names()
-            break
-        load("\downloads\data_filter.json")
+    def getDatabase():
+      # Static access method. 
+      if Helper.__db == None:
+         Helper()
+      return Helper.__db
 
-    db.processed_data.find({"text":{}})
+    def getTextFromData():
+        if (mongoClient == None)
+            mongoClient = MongoClient()
+
+        dbList = mongoClient.list_database_names()
+        if framenet not in dbList):
+            db = Helper.getDatabase()
+
+        db.p_data.find({}, {"text":1})
 
 
-def getStory:
-    if (mongoClient != None)
-        MongoClient mongoClient = new MongoClient()
-    if processed_data not in dbList):
-        exists = os.path.isfile('\downloads\data_filter.json')
-        if not exists:
-            print("json file doesn't exist")
-            break
-        load("\downloads\data_filter.json")
-    db.processed_data.find({"story":{}})
+    def getStoryFromData():
+        if (mongoClient == None)
+            mongoClient = MongoClient()
+
+        if framenet not in dbList):
+            db = Helper.getDatabase()
+
+        db.p_data.find({}, {"story":1})
+
+#we can't find a way to access specific docs so we decided to create a method 
+#that would operate with a collection of documents that have an "index" field as well. 
+    def getEntry(index):
+        processed_data = db.p_data
+        #document = db.processed_data.find("index": index)
+        textList = getTextFromData()
+        text = textList[index]
+        #text = document["text"]
+        #text = document["story"]
+        storyList = getStoryFromData()
+        story = storyList[index]
+        entry = (text, story)
+        return entry
+
+
 
 ###
 #How to load Json into a MongoDB database:

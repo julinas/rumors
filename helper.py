@@ -50,6 +50,14 @@ class MongoHelper:
             entry = (text,story)
             entries.append(entry)
         return entries
+    
+    def getEntry(cls):
+        docs = MongoHelper.getDB().p_data.find({})
+        for i in docs:
+            text = i["text"]
+            story = i["story"]
+            entry = (text,story)
+            yield entry
 
 #we can't find a way to access specific docs so we decided to create a method 
 #that would operate with a collection of documents that have an "index" field as well. 
